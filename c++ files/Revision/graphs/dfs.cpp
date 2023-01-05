@@ -1,34 +1,36 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-// dfs
-void dfs(int node, vector<int> &vis, vector<int> adj[], vector<int> &storeDfs){
-    storeDfs.push_back(node);
-    vis[node] = 1;
+void dfs(int node,vector<int> adj[],int visited[],vector<int> &ls){
+    ls.push_back(node);
+    visited[node] = 1;
     for(auto it: adj[node]){
-        if(!vis[it]){
-            dfs(it, vis, adj, storeDfs);
+        if(!visited[it]){
+            dfs(it,adj,visited,ls);
         }
     }
 }
 
+void addEdge(vector<int> adj[],int v, int w)
+{
+    adj[v].push_back(w); // Add w to v’s list.
+}
+
 int main(){
-    int n, m;
+
+    int n,m;
     cin>>n>>m;
     vector<int> adj[n+1];
-    for(int i=0; i<m; i++){
-        int u, v;
-        cin>>u>>v;
-        adj[u].push_back(v);
-        adj[v].push_back(u);
+    addEdge(adj,0, 1);
+    addEdge(adj,0, 2);
+    addEdge(adj,1, 2);
+    addEdge(adj,2, 0);
+    addEdge(adj,2, 3);
+    addEdge(adj,3, 3);
+    vector<int> ls;
+    int visited[n+1]={0};
+    dfs(1,adj,visited,ls);
+    for(auto it:ls){
+        cout<<it<<" ";
     }
-    int src;
-    cin>>src;
-    vector<int> vis(n+1, 0);
-    vector<int> storeDfs;
-    dfs(src, vis, adj, storeDfs);
-    for(int i=0; i<storeDfs.size(); i++){
-        cout<<storeDfs[i]<<" ";
-    }
-    return 0;
 }

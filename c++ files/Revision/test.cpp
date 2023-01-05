@@ -1,64 +1,36 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-int pre(char c)
-{
-    if(c=='^')
-    return 3;
-    if(c=='/' || c=='*')
-    return 2;
-    if(c=='+' || c=='-')
-    return 1;
-    else
-    return -1;
-}
-
-
-void inf_post(string s)
-{
-    stack<char> st;
-    string result;
-    for(int i=0;i<s.size();i++)
-    {
-        char c = s[i];
-        if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')
-			|| (c >= '0' && c <= '9'))
-            {
-                result+=c;
-            }
-        else if(c=='(')
-        {
-            st.push(c);
-
-        }
-        else if(c==')')
-        {
-            while(st.top()!='(')
-            {
-                result+=st.top();
-                st.pop();
-            }
-            st.pop();
-        }
-        else{
-            while(!st.empty() && pre(c) <=pre(st.top())){
-                result+=st.top();
-                st.pop();
-            }
-            st.push(c);
+void dfs(int node,vector<int> adj[],int visited[],vector<int> &ls){
+    ls.push_back(node);
+    visited[node] = 1;
+    for(auto it: adj[node]){
+        if(!visited[it]){
+            dfs(it,adj,visited,ls);
         }
     }
-    while(!st.empty())
-        {
-            result+=st.top();
-            st.pop();
-        }
-    cout<<result<<endl;
 }
 
-
-int main()
+void addEdge(vector<int> adj[],int v, int w)
 {
-    string s = "a+b*(c^d-e)^(f+g*h)-i";
-    inf_post(s);
+    adj[v].push_back(w); // Add w to v’s list.
+}
+
+int main(){
+
+    int n,m;
+    cin>>n>>m;
+    vector<int> adj[n+1];
+    addEdge(adj,0, 1);
+    addEdge(adj,0, 2);
+    addEdge(adj,1, 2);
+    addEdge(adj,2, 0);
+    addEdge(adj,2, 3);
+    addEdge(adj,3, 3);
+    vector<int> ls;
+    int visited[n+1]={0};
+    dfs(1,adj,visited,ls);
+    for(auto it:ls){
+        cout<<it<<" ";
+    }
 }
