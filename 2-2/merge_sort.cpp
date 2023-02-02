@@ -1,5 +1,6 @@
 #include<bits/stdc++.h>
 #include<iostream>
+
 using namespace std;
 #define ll long long
 #define pb push_back
@@ -31,7 +32,7 @@ void merge(vector<int> &a, int l, int m, int r, int &count)
         {
             a[k] = R[j];
             j++;
-            count += 1;
+            count ++;
         }
         k++;
     }
@@ -62,15 +63,22 @@ void mergeSort(vector<int> &a, int l, int r, int &count)
 
 int main()
 {
-    int n;
-    cin>>n;
-    vector<int> a(n);
-    for (int i = 0; i < n; i++){
-        int x;
-        // genrate a random value in range of 10000
-        x = rand() % 100;
-        a[i] = x;
+    //int n;
+    //cin>>n;
+    int n =0;
+    vector<int> a;
+    string line = "10 9";
+    //getline(cin, line);
+    string word;
+    stringstream ss(line);
+    while (ss >> word) {
+      cout << word << endl;
+      int x = stoi(word);
+      a.push_back(x);
+      n++;
     }
+      cout<<n<<endl;
+  
     for(int i=0;i<n;i++){
         cout<<a[i]<<" ";
     }

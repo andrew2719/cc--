@@ -1,0 +1,8 @@
+-> pointer stores the address of another variable
+-> pointer itself is an array
+-> makes easy to access the data
+
+stucture:
+-> collection of variables of different data types
+-> pointers also can be used
+-> array type of stucture are nothing but pointers or else each index of array is a stucture type variable
