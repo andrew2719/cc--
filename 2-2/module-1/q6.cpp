@@ -1,42 +1,73 @@
-#include<bits/stdc++.h>
+// C++ code for the above approach
+// source GFG
+#include <algorithm>
+#include <iostream>
 using namespace std;
 
+// A structure to represent a job
+struct Job {
 
+	char id; // Job Id
+	int dead; // Deadline of job
+	int profit; // Profit if job is over before or on
+				// deadline
+};
 
-void sort_array_with_deadline(vector<vector<int>> &arr){
-    sort(arr.begin(),arr.end(),[](vector<int> a,vector<int> b){
-        return a[1]<b[1];
-    });
-}
-auto cmp = [](const vector<int>& a, const vector<int>& b) {
-        return a[2] < b[2];
-    };
-void Job_schedule(vector<vector<int>> &arr){
-    sort_array_with_deadline(arr);
-    int n = arr.size();
-    int max_deadline = arr[n-1][1];
-    vector<int> slot(max_deadline+1,-1);
-    int profit = 0;
-    for(int i=n-1;i>=0;i--){
-        int slot_available;
-        if(i==0){
-            slot_available = arr[i][1];
-        }
-        else{
-            slot_available = arr[i][1]-arr[i-1][1];
-        }
-    }
-
+// Comparator function for sorting jobs
+bool comparison(Job a, Job b)
+{
+	return (a.profit > b.profit);
 }
 
+// Returns maximum profit from jobs
+void printJobScheduling(Job arr[], int n)
+{
+	// Sort all jobs according to decreasing order of profit
+	sort(arr, arr + n, comparison);
 
-int main(){
-    int n = 5;
-    vector<vector<int>> arr;
-    for(int i=0;i<n;i++){
-        int a,b,c;
-        cin>>a>>b>>c;
-        arr.push_back({a,b,c});
-    }
-    //sort_array_with_deadline(arr);    
+	int result[n]; // To store result (Sequence of jobs)
+	bool slot[n]; // To keep track of free time slots
+
+	// Initialize all slots to be free
+	for (int i = 0; i < n; i++)
+		slot[i] = false;
+
+	// Iterate through all given jobs
+	for (int i = 0; i < n; i++) {
+		// Find a free slot for this job (Note that we start
+		// from the last possible slot)
+		for (int j = min(n, arr[i].dead) - 1; j >= 0; j--) {
+			// Free slot found
+			if (slot[j] == false) {
+				result[j] = i; // Add this job to result
+				slot[j] = true; // Make this slot occupied
+				break;
+			}
+		}
+	}
+
+	// Print the result
+	for (int i = 0; i < n; i++)
+		if (slot[i])
+			cout << arr[result[i]].id << " ";
 }
+
+// Driver's code
+int main()
+{
+	Job arr[] = { { 'a', 2, 100 },
+				{ 'b', 1, 19 },
+				{ 'c', 2, 27 },
+				{ 'd', 1, 25 },
+				{ 'e', 3, 15 } };
+
+	int n = sizeof(arr) / sizeof(arr[0]);
+	cout << "Following is maximum profit sequence of jobs "
+			"\n";
+
+	// Function call
+	printJobScheduling(arr, n);
+	return 0;
+}
+
+// This code is contributed by Aditya Kumar (adityakumar129)
