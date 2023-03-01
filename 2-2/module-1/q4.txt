@@ -1,7 +1,7 @@
 a) Greedy Algorithm:
 
 Sort the people in increasing order of their crossing times.
-Take the first two people """(the ones with the smallest crossing times) and send them across the bridge.
+Take the first two people (the ones with the smallest crossing times) and send them across the bridge.
 The faster person returns with the flashlight.
 Repeat steps 2-3 with the next two people until everyone has crossed the bridge.
 For the given problem, the algorithm works as follows:
