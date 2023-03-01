@@ -3,24 +3,47 @@
 using namespace std;
 
 
-// function that calculates the distance of every coordinate to every other coordinate
-// in the vector and returns the output vector that contains the indices of the vector
-// that have distance == 1 (both the compared indeces)
+// function that caclulates the distance a point with all the other points in the vector with divide and conquer
+// and stores if any two have distance = 1 in output vector
 
-vector<pair<int,int>> distance(vector<pair<int,int>> coordinates, int start, int end){
-    vector<pair<int,int>> output;
-    for(int i=start;i<=end;i++){
-        for(int j=i+1;j<=end;j++){
-            if(abs(coordinates[i].first - coordinates[j].first) == 1 && abs(coordinates[i].second - coordinates[j].second) == 0){
-                output.push_back(make_pair(i,j));
+void distance(vector<pair<int,int>> coordinates, vector<pair<int,int>> &output, int start, int end){
+    if(start == end){
+        return;
+    }
+    else if(start == end-1){
+        if(abs(coordinates[start].first - coordinates[end].first) == 1 && abs(coordinates[start].second - coordinates[end].second) == 0){
+            output.push_back(make_pair(start,end));
+        }
+        else if(abs(coordinates[start].first - coordinates[end].first) == 0 && abs(coordinates[start].second - coordinates[end].second) == 1){
+            output.push_back(make_pair(start,end));
+        }
+        return;
+    }
+    else{
+        int mid = (start+end)/2;
+        distance(coordinates,output,start,mid);
+        distance(coordinates,output,mid+1,end);
+        int i = start;
+        int j = mid+1;
+        while(i<=mid && j<=end){
+            if(coordinates[i].first < coordinates[j].first){
+                i++;
             }
-            else if(abs(coordinates[i].first - coordinates[j].first) == 0 && abs(coordinates[i].second - coordinates[j].second) == 1){
-                output.push_back(make_pair(i,j));
+            else if(coordinates[i].first > coordinates[j].first){
+                j++;
+            }
+            else{
+                if(abs(coordinates[i].second - coordinates[j].second) == 1){
+                    output.push_back(make_pair(i,j));
+                }
+                i++;
+                j++;
             }
         }
     }
-    return output;
 }
+
+
 
 
 
@@ -29,7 +52,7 @@ int main(){
     //cin>>n;
 
     vector<pair<int,int>> coordinates = {{0, 0}, 
-                                        {0,1},
+                                        {1, 0}, 
                                         {1,1}};
 
     /*for(int i=0;i<n;i++){
@@ -38,11 +61,15 @@ int main(){
         coordinates.push_back(make_pair(x,y));
     }*/
 
-    vector<pair<int,int>> output = distance(coordinates, 0, coordinates.size()-1);
+
+    sort(coordinates.begin(),coordinates.end());
+
+    vector<pair<int,int>> output;
+
+    distance(coordinates,output,0,coordinates.size()-1);
 
     for(int i=0;i<output.size();i++){
         cout<<output[i].first<<" "<<output[i].second<<endl;
     }
 
-    
 }
