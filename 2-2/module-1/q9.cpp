@@ -3,9 +3,6 @@
 using namespace std;
 
 
-// function that caclulates the distance a point with all the other points in the vector with divide and conquer
-// and stores if any two have distance = 1 in output vector
-
 void distance(vector<pair<int,int>> coordinates, vector<pair<int,int>> &output, int start, int end){
     if(start == end){
         return;
@@ -53,7 +50,8 @@ int main(){
 
     vector<pair<int,int>> coordinates = {{0, 0}, 
                                         {1, 0}, 
-                                        {1,1}};
+                                        {1,1},
+                                        {1,2}};
 
     /*for(int i=0;i<n;i++){
         int x,y;
@@ -71,5 +69,8 @@ int main(){
     for(int i=0;i<output.size();i++){
         cout<<output[i].first<<" "<<output[i].second<<endl;
     }
+
+    //output: 0 1 // 0 and 1 have distance 1 and also 1 2(indecies)
+    //        1 2
 
 }
