@@ -18,3 +18,5 @@ cin>>n;
 tower(n, 'A', 'C', 'B');
 return 0;
 }
+
+// time complexity is O(2^n)

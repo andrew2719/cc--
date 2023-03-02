@@ -50,3 +50,4 @@ if __name__ == '__main__':
             three_left_case(a_side, b_side)
         else:
             four_or_more_case(a_side, b_side)
+

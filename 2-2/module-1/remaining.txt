@@ -7,4 +7,4 @@
 9 - see that recursion once
 
 
-others knapsack, kruskl's, disjoint set, etc. 
+others knapsack, kruskl's, disjoint set, etc.
