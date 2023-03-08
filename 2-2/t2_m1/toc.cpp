@@ -1,119 +1,95 @@
-
-#include <bits/stdc++.h>
-#define author armag-pro
+#include<bits/stdc++.h>
 using namespace std;
+// epsilon NFA to NFA
 
-const int N=109;
-int n, m;
-vector<int> nt[N][N], nt1[N][N];
-set<int> closure[N];
+map<char,set<char>> epsilon_closure(map<char,vector<pair<char,int>>> transitions){
+    map<char,set<char>> epsilon_states;
+    stack<pair<char,char>> st;
 
-void print_without_eps() {
-	 cout << "\nNFA without epsilon moves:\n";
-	 cout << "============================\n";
-	 cout << "Q\t\tSymbols\n";
+    for(auto state:transitions){
+        for(auto transition:state.second){
 
-		for(int i=0; i<n; i++) {
-			cout << "Q" << i << "\t";
-			for(int j=1; j<=m; j++) {
-				cout << "{";
-				for(int ii: nt1[i][j]) cout << ii << " ";
-				cout << "}\t";
-			}
-			cout << endl;
-		}
-		cout << endl;
+            if(transition.second==5){
+                st.push({state.first,transition.first});
+                epsilon_states[state.first].insert(transition.first);
+
+                while(!st.empty()){
+                    pair<char,char> trans = st.top(); // 1st time {a,b}
+                    st.pop();
+
+                    for(auto it:transitions[trans.second]){
+                        if(it.second==5){
+                            st.push({trans.second,it.first}); // 1st time {b,c} - .first is state to .second state
+                            epsilon_states[trans.second].insert(it.first);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    return epsilon_states;
 }
 
-int main() {
 
-    /*
-        Input: 
-            3 3
-            1 1
-            1 0
-            0
-            0
-            1 2
-            0
-            1 1
-            0
-            0
-            0
-            0
-            1 2
-        Output:
-            Q0  {0 1 2 }    {1 2 }  {2 }    
-            Q1  {}  {1 2 }  {2 }    
-            Q2  {}  {}  {2 }
-    */
-
-    cout << "No. of states: ";
-    cin >> n;
-    cout << "No. of input symbols: ";
-    cin >> m;
-    cout << "Enter transitions:\n\n";
-
-    // Transition table
-    for(int i=0; i<n; i++) {
-        cout << "State " << i << endl;
-    	for(int j=0; j<=m; j++) {
-
-    		cout << "\tNo of transitions for ";
-    		if(j == 0) cout << "eps";
-    		else cout << char(j + 'a' - 1);
-    		cout << ": ";
-    		int temp; cin >> temp;
-    		nt[i][j].resize(temp);
-            if(temp == 0) {
-                
-            } else if(temp == 1) {
-                cout << "\tEnter the state: ";
-            } else {
-                cout << "\tEnter the " << temp << " states: ";
-            }
-    		for(int k=0; k<nt[i][j].size(); k++) {
-    			cin >> nt[i][j][k];
-    		}
-    	}
-        cout << endl;
+void print_map(map<char,vector<pair<char,int>>> transitions){
+    for(auto it:transitions){
+        cout<<it.first<<"->";
+        for(auto it2:it.second){
+            cout<<"("<<it2.first<<","<<it2.second<<")";
+        }
+        cout<<endl;
     }
+}
 
-    // Finding epsilon closure for each state
-    for(int i=0; i<n; i++) {
-    	queue<int> q;
-    	vector<bool> vis(n, false);
-    	q.push(i); vis[i] = 1;
-    	while(!q.empty()) {
-    		int top = q.front(); q.pop();
-    		for(int k=0; k<nt[top][0].size(); k++) {
-    			int cur = nt[top][0][k];
-    			if(vis[cur] == 0) {
-    				vis[cur] = 1;
-    				q.push(cur);
-    			}
-    		}
-    	}
-    	for(int j=0; j<n; j++) {
-    		if(vis[j] == 1) closure[i].insert(j);
-    	}
+void print_epsilon_map(map<char,set<char>> epsilon_states){
+    cout<<"epsilon closures:"<<endl;
+    for(auto it:epsilon_states){
+        cout<<it.first<<"->";
+        for(auto it2:it.second){
+            cout<<it2<<" ";
+        }
+        cout<<endl;
     }
+}
 
-    // Find epsilon* --> symbol --> epsilon* for each state and symbol
-    for(int i=0; i<n; i++) {
-    	for(int ii: closure[i]) {
-    		for(int j=1; j<=m; j++) {
-    			for(int k=0; k<nt[ii][j].size(); k++) {
-    				int cur = nt[ii][j][k];
-    				for(int iii: closure[cur]) {
-    					nt1[i][j].push_back(iii);
-    				}
-    			}
-    		}
-    	}
-    }
 
-    print_without_eps();
+int main(){
+    /*int n;
+    cout<<"Enter the number of states: ";
+    cin>>n;*/
 
-    return 0; 
-} 
+    map<char,vector<pair<char,int>>> transitions;
+    // input sysmbols 0 , 1
+    // 5 for epsilon
+
+    // sample transitions
+    transitions['A'] = {{'A',1},{'B',0},{'B',5},{'C',5}};
+    transitions['B'] = {{'B',1},{'C',5}};
+    transitions['C'] = {{'C',1},{'C',0}};
+
+
+    // input transitions
+    /*for(int i=0;i<n;i++){
+        cout<<"enter state:";
+        char state;
+        cin>>state;
+        cout<<"enter number of transitions:";
+        int m;
+        cin>>m;
+        for(int j=0;j<m;j++){
+            cout<<"enter transition "<<j+1<<":";
+            char input;
+            int output;
+            cin>>input>>output;
+            transitions[state].push_back({input,output});
+        }
+    }*/
+
+    print_map(transitions);
+
+    map<char,set<char>> e_c = epsilon_closure(transitions);
+
+    print_epsilon_map(e_c);
+    
+}
