@@ -10,8 +10,11 @@ map<char,set<char>> epsilon_closures;
 map<char,map<int,set<int>>> transition_table_nfa;
 map<string,map<int,string>> transition_table_dfa;
 set<int> alphabets;
+set<char> states;
+// transitions contains the transitions of all states {A : {(A,1),(B,0),(B,5),(C,5)}, B : {(B,1),(C,5)}, C : {(C,1),(C,0)}}
 
 
+// transition table contains the final transition table nfa{A : {0 : {B,C}, 1 : {A,B,C}}, B : ....like that
 map<char,map<int,set<int>>> final_transition_table_nfa(map<char,vector<pair<char,int>>> transitions,map<char,set<char>> epsilon_closures){
     map<char,map<int,set<int>>> transition_table;
     
@@ -33,7 +36,7 @@ map<char,map<int,set<int>>> final_transition_table_nfa(map<char,vector<pair<char
     return transition_table;
 }
 
-
+// epsilon closures contains the colusers of all states {A : {A,B,C}, B : {B,C}, C : {C}}
 map<char,set<char>> find_epsilon_closure(map<char,vector<pair<char,int>>> transitions){
     map<char,set<char>> epsilon_states;
     stack<char> st;
@@ -105,11 +108,7 @@ void print_transition_table(map<char,map<int,set<int>>> transition_table){
 }
 
 
-
-// epsilon closures contains the colusers of all states {A : {A,B,C}, B : {B,C}, C : {C}}
-// transitions contains the transitions of all states {A : {(A,1),(B,0),(B,5),(C,5)}, B : {(B,1),(C,5)}, C : {(C,1),(C,0)}}
-// transition table contains the final transition table {A : {0 : {B,C}, 1 : {A,B,C}}, B : ....like that
-
+// clearing all the duplicates in the transition table of dfa {A : {0 : {B,C}, 1 : {A,B,C}}, B : ....like that
 map<string,map<int,string>> clearing_dups_in_dfa(map<string,map<int,string>> transition_table_dfa){
     for(auto it:transition_table_dfa){
         for(auto inner_map:it.second){
@@ -137,11 +136,12 @@ void print_dfa(map<string,map<int,string>> transition_table_dfa){
     }
 }
 
-map<char,map<int,set<int>>> check_all_are_present(map<char,map<int,set<int>>> transition_table_nfa){
-    for(auto it:transition_table_nfa){
+// to check if all the alphabets are present in the transition table
+map<char,map<int,set<int>>> check_all_are_present(map<char,map<int,set<int>>> transition_table_nfa){ 
+    for(auto it:states){
         for(int alphabet:alphabets){
-            if(transition_table_nfa[it.first][alphabet].size()==0){
-                transition_table_nfa[it.first][alphabet].insert('-');
+            if(transition_table_nfa[it][alphabet].size()==0){
+                transition_table_nfa[it][alphabet].insert('$');
             }
         }
     }
@@ -157,7 +157,7 @@ void E_NFA_TO_NFA(map<char,vector<pair<char,int>>> transitions){
 
     transition_table_nfa = final_transition_table_nfa(transitions,epsilon_closures);
 
-
+    transition_table_nfa = check_all_are_present(transition_table_nfa);
 
     print_transition_table(transition_table_nfa);
 }
@@ -172,6 +172,7 @@ void NFA_TO_DFA(map<char,map<int,set<int>>> transition_table_nfa){
         for(auto inner_map:it.second){
             string s = "";
             for(auto inner_set:inner_map.second){
+                if(inner_set!='$')
                 s+=inner_set;
             }
 
@@ -189,6 +190,7 @@ void NFA_TO_DFA(map<char,map<int,set<int>>> transition_table_nfa){
             set<char> states;
             for(auto inner_map:transition_table_nfa[new_state[i]]){
                 for(auto inner_set:inner_map.second){
+                    if(inner_set!='$')
                     states.insert(inner_set);
                 }
                 for(char state:states){
@@ -201,14 +203,44 @@ void NFA_TO_DFA(map<char,map<int,set<int>>> transition_table_nfa){
 
     transition_table_dfa = clearing_dups_in_dfa(transition_table_dfa);
 
+
+    //check if the null state is present in the transition table
+    bool null_state_present = false;
+    for(auto it:transition_table_dfa){
+        for(auto it2:it.second){
+            if(it2.second==""){
+                null_state_present = true;
+                break;
+            }
+        }
+    }
+
+    if(null_state_present){
+        for(int alphabet:alphabets){
+        transition_table_dfa["$"][alphabet] = "$";
+    }
+    }
+    
     print_dfa(transition_table_dfa);
 
 }
 
+
+
+set<char> total_states(map<char,vector<pair<char,int>>> transitions_e_nfa_to_nfa){
+    set<char> total_states;
+    for(auto it:transitions_e_nfa_to_nfa){
+        total_states.insert(it.first);
+    }
+    return total_states;
+}
+
+// to find the alphabets in the transition table
 set<int> set_of_alphabets(map<char,vector<pair<char,int>>> transitions){
     
     for(auto it:transitions){
         for(auto it2:it.second){
+            if(it2.second!=5)
             alphabets.insert(it2.second);
         }
     }
@@ -247,6 +279,9 @@ int main(){
             transitions[state].push_back({input,output});
         }
     }*/
+
+    states = total_states(transitions_e_nfa_to_nfa);
+    alphabets = set_of_alphabets(transitions_e_nfa_to_nfa);
 
     E_NFA_TO_NFA(transitions_e_nfa_to_nfa);
 
