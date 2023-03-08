@@ -2,14 +2,14 @@
 using namespace std;
 
 
-
+// '-' is used to represent the empty set
 
 // all the global declarations
 map<char,vector<pair<char,int>>> transitions_e_nfa_to_nfa;
 map<char,set<char>> epsilon_closures;
 map<char,map<int,set<int>>> transition_table_nfa;
 map<string,map<int,string>> transition_table_dfa;
-
+set<int> alphabets;
 
 
 map<char,map<int,set<int>>> final_transition_table_nfa(map<char,vector<pair<char,int>>> transitions,map<char,set<char>> epsilon_closures){
@@ -76,6 +76,7 @@ void print_map(map<char,vector<pair<char,int>>> transitions){
     }
 }
 
+
 void print_epsilon_map(map<char,set<char>> epsilon_closures){
     cout<<"epsilon closures:"<<endl;
     for(auto it:epsilon_closures){
@@ -86,6 +87,7 @@ void print_epsilon_map(map<char,set<char>> epsilon_closures){
         cout<<endl;
     }
 }
+
 
 void print_transition_table(map<char,map<int,set<int>>> transition_table){
     cout<<"transition table nfa:"<<endl;
@@ -101,6 +103,8 @@ void print_transition_table(map<char,map<int,set<int>>> transition_table){
         cout<<endl;
     }
 }
+
+
 
 // epsilon closures contains the colusers of all states {A : {A,B,C}, B : {B,C}, C : {C}}
 // transitions contains the transitions of all states {A : {(A,1),(B,0),(B,5),(C,5)}, B : {(B,1),(C,5)}, C : {(C,1),(C,0)}}
@@ -133,6 +137,17 @@ void print_dfa(map<string,map<int,string>> transition_table_dfa){
     }
 }
 
+map<char,map<int,set<int>>> check_all_are_present(map<char,map<int,set<int>>> transition_table_nfa){
+    for(auto it:transition_table_nfa){
+        for(int alphabet:alphabets){
+            if(transition_table_nfa[it.first][alphabet].size()==0){
+                transition_table_nfa[it.first][alphabet].insert('-');
+            }
+        }
+    }
+    return transition_table_nfa;
+}
+
 void E_NFA_TO_NFA(map<char,vector<pair<char,int>>> transitions){
     print_map(transitions);
 
@@ -141,6 +156,8 @@ void E_NFA_TO_NFA(map<char,vector<pair<char,int>>> transitions){
     print_epsilon_map(epsilon_closures);
 
     transition_table_nfa = final_transition_table_nfa(transitions,epsilon_closures);
+
+
 
     print_transition_table(transition_table_nfa);
 }
@@ -187,6 +204,17 @@ void NFA_TO_DFA(map<char,map<int,set<int>>> transition_table_nfa){
     print_dfa(transition_table_dfa);
 
 }
+
+set<int> set_of_alphabets(map<char,vector<pair<char,int>>> transitions){
+    
+    for(auto it:transitions){
+        for(auto it2:it.second){
+            alphabets.insert(it2.second);
+        }
+    }
+    return alphabets;
+}
+
 int main(){
     /*int n;
     cout<<"Enter the number of states: ";
@@ -224,8 +252,4 @@ int main(){
 
     NFA_TO_DFA(transition_table_nfa);
 
-
-    
-   
-    
 }
