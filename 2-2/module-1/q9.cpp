@@ -41,9 +41,6 @@ void distance(vector<pair<int,int>> coordinates, vector<pair<int,int>> &output, 
 }
 
 
-
-
-
 int main(){
     int n;
     //cin>>n;

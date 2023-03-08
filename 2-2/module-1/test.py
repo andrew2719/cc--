@@ -1,52 +1,60 @@
-count = 0
+import random as rd
+import time 
+import sys
+import statistics as st
 
 
-def two_left_case(a_side, b_side):
-    move_from_a_to_b(a_side[0], a_side[1], a_side, b_side)
+def quick_sort(arr,pivot):
+    if len(arr) <= 1:
+        return arr
+    # pivot = arr[0]
+    left = [x for x in arr[1:] if x <= pivot]
+    right = [x for x in arr[1:] if x > pivot]
+    return quick_sort(left,pivot) + [pivot] + quick_sort(right,pivot)
+
+def piviot_calc(x,arr):
+    if x==0:
+        return arr[0]
+    elif x==1:
+        # return random from arry index
+        rdint = rd.randint(0,len(arr)-1)
+        return arr[rdint]
+    elif x==2:
+        r,s,t = 0,len(arr)//2,len(arr)-1
+        return st.median([arr[r],arr[s],arr[t]])
+    elif x==3:
+        r,s,t = len(arr)//4,len(arr)//2,3*len(arr)//4
+        return st.median([arr[r],arr[s],arr[t]])
+        
 
 
-def three_left_case(a_side, b_side):
-    move_from_a_to_b(max(a_side), min(a_side), a_side, b_side)
-    move_from_b_to_a(min(b_side), a_side, b_side)
-    print("Move %s back to A side" % str(min(b_side)))
 
+def main():
 
-def four_or_more_case(a_side, b_side):
-    move_from_a_to_b(min(a_side), sorted(a_side)[1], a_side, b_side)
-    move_from_b_to_a(min(b_side), a_side, b_side)
-    move_from_a_to_b(max(a_side), sorted(a_side)[-2], a_side, b_side)
-    move_from_b_to_a(min(b_side), a_side, b_side)
+    # Generate a list of 1000 random numbers
+    arr = [rd.randint(0, 50) for i in range(10)]
+    print(arr)
+    '''
+    # Sort the list
+    start = time.time()
+    arr = quick_sort(arr,piviot)
+    end = time.time()
 
+    # Print the time it took to sort the list
+    print(end - start)
+    print(arr)
+    '''
+    case = int(input("Enter the case number: "))
+    # case 1: first element as pivot
+    start = time.time()
+    arr = quick_sort(arr,piviot_calc(case,arr))
+    end = time.time()
+    # print upto 10 decimal places
+    print("{:.10f}".format(end - start))
+    print(arr)
 
-def move_from_a_to_b(first_number, second_number, a_side, b_side):
-    global count
-    a_side.remove(first_number)
-    a_side.remove(second_number)
-    b_side.append(first_number)
-    b_side.append(second_number)
-    count += max(first_number, second_number)
-    print("Move %s & %s to B side." % (str(first_number), str(second_number)))
+    
 
+if __name__ == "__main__":
 
-def move_from_b_to_a(number, a_side, b_side):
-    global count
-    b_side.remove(number)
-    a_side.append(number)
-    count += number
-    print("Move %s back to A side." % str(number))
-
-
-if __name__ == '__main__':
-    a_side = [int(x) for x in input("Enter time of each person: ").split()]
-    b_side = []
-    while len(a_side) != 0:
-        if len(a_side) == 1:
-            print("Just bring that number to B...")
-        if len(a_side) == 2:
-            two_left_case(a_side, b_side)
-            print("Total step: %s" % str(count))
-            break
-        elif len(a_side) == 3:
-            three_left_case(a_side, b_side)
-        else:
-            four_or_more_case(a_side, b_side)
+    main()

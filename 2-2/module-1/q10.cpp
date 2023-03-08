@@ -1,53 +1,79 @@
+#include <iostream>
 #include<bits/stdc++.h>
 using namespace std;
+int main() {
+	int n;
+	cin>>n;
+	vector<vector<int>> a;
+	vector<vector<int>> result(n,vector<int>(n,0));
 
-int main(){
-	int N,m;
-	cin >> N >> m;
-	vector<pair<int,int> > adj[N]; 
+	for(int i=0;i<n;i++){
+		vector<int> temp;
+		for(int j=0;j<n;j++){
+			int x;
+			cin>>x;
+			temp.push_back(x);
+		}
+		a.push_back(temp);
+	}
 
-	int a,b,wt;
-	for(int i = 0; i<m ; i++){
-		cin >> a >> b >> wt;
-		adj[a].push_back(make_pair(b,wt));
-		adj[b].push_back(make_pair(a,wt));
-	}	
+	vector<pair<int,int>> adj[n];
+	for(int i=0;i<n;i++){
+		for(int j=0;j<n;j++){
+			if(a[i][j]!=0)
+			adj[i].push_back(make_pair(j,a[i][j]));
+		}
+	}
+
+	int parent[n],key[n];
+	bool mstset[n];
+
+	for(int i=0;i<n;i++){
+		key[i] = INT_MAX;mstset[i] = false;
+	}
+
+	priority_queue<pair<int,int>,vector<pair<int,int>>,greater<pair<int,int>>> pq;
+
+	key[0] = 0;
+	parent[0] = -1;
+	pq.push({0,0});
+
+	while(!pq.empty()){
+		int u = pq.top().second;
+		pq.pop();
+
+		mstset[u] = true;
+
+		for(auto it:adj[u]){
+			int v = it.first;
+			int weight = it.second;
+			if(mstset[v]==false && weight<key[v]){
+				parent[v] = u;
+				key[v] = weight;
+				
+				
+				pq.push({key[v],v});
+			}
+		}
+	}
+
+	for(int i=1;i<n;i++){
+		result[parent[i]][i] = key[i];
+		result[i][parent[i]] = key[i]; 
+	}
+	for(int i=0;i<n;i++){
+		for(int j=0;j<n;j++){
+			cout<<result[i][j]<<" ";
+		}
+		cout<<endl;
+	}
+	int sum = 0;
+	for(int i=0;i<n;i++){
+		sum+=key[i];	
+		}
 	
-	int parent[N]; 
-      
-    int key[N]; 
-      
-    bool mstSet[N]; 
-  
-    for (int i = 0; i < N; i++) 
-        key[i] = INT_MAX, mstSet[i] = false; 
-    
-    priority_queue< pair<int,int>, vector <pair<int,int>> , greater<pair<int,int>> > pq;
+	cout<<"Total cost of spanning tree="<<sum<<endl;
 
-    key[0] = 0; 
-    parent[0] = -1; 
-    pq.push({0, 0});
-    
-    while(!pq.empty())
-    { 
-        int u = pq.top().second; 
-        pq.pop(); 
-        
-        mstSet[u] = true; 
-        
-        for (auto it : adj[u]) {
-            int v = it.first;
-            int weight = it.second;
-            if (mstSet[v] == false && weight < key[v]) {
-                parent[v] = u;
-		key[v] = weight; 
-                pq.push({key[v], v});    
-            }
-        }
-            
-    } 
-    
-    for (int i = 1; i < N; i++) 
-        cout << parent[i] << " - " << i <<" \n"; 
-	return 0;
+	
+
 }
