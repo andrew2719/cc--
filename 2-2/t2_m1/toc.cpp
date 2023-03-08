@@ -2,7 +2,20 @@
 using namespace std;
 
 
-// '-' is used to represent the empty set
+// function declarations
+map<char,map<int,set<int>>> final_transition_table_nfa(map<char,vector<pair<char,int>>> transitions,map<char,set<char>> epsilon_closures);
+map<char,set<char>> find_epsilon_closure(map<char,vector<pair<char,int>>> transitions);
+void print_map(map<char,vector<pair<char,int>>> transitions);
+void print_epsilon_map(map<char,set<char>> epsilon_closures);
+void print_transition_table(map<char,map<int,set<int>>> transition_table);
+map<string,map<int,string>> clearing_dups_in_dfa(map<string,map<int,string>> transition_table_dfa);
+void print_dfa(map<string,map<int,string>> transition_table_dfa);
+map<char,map<int,set<int>>> check_all_are_present(map<char,map<int,set<int>>> transition_table_nfa);
+void E_NFA_TO_NFA(map<char,vector<pair<char,int>>> transitions);
+void NFA_TO_DFA(map<char,map<int,set<int>>> transition_table_nfa);
+set<char> total_states(map<char,vector<pair<char,int>>> transitions_e_nfa_to_nfa);
+set<int> set_of_alphabets(map<char,vector<pair<char,int>>> transitions);
+// '$' is used to represent the empty set
 
 // all the global declarations
 map<char,vector<pair<char,int>>> transitions_e_nfa_to_nfa;
@@ -69,16 +82,6 @@ map<char,set<char>> find_epsilon_closure(map<char,vector<pair<char,int>>> transi
 }
 
 
-void print_map(map<char,vector<pair<char,int>>> transitions){
-    for(auto it:transitions){
-        cout<<it.first<<"->";
-        for(auto it2:it.second){
-            cout<<"("<<it2.first<<","<<it2.second<<")";
-        }
-        cout<<endl;
-    }
-}
-
 
 void print_epsilon_map(map<char,set<char>> epsilon_closures){
     cout<<"epsilon closures:"<<endl;
@@ -86,22 +89,6 @@ void print_epsilon_map(map<char,set<char>> epsilon_closures){
         cout<<it.first<<"->";
         for(auto it2:it.second){
             cout<<it2<<" ";
-        }
-        cout<<endl;
-    }
-}
-
-
-void print_transition_table(map<char,map<int,set<int>>> transition_table){
-    cout<<"transition table nfa:"<<endl;
-    for(auto it:transition_table){
-        cout<<it.first<<"->";
-        for(auto it2:it.second){
-            cout<<it2.first<<"->";
-            for(char it3:it2.second){
-                cout<<it3<<" ";
-            }
-            cout<<endl;
         }
         cout<<endl;
     }
@@ -124,17 +111,6 @@ map<string,map<int,string>> clearing_dups_in_dfa(map<string,map<int,string>> tra
     return transition_table_dfa;
 }
 
-void print_dfa(map<string,map<int,string>> transition_table_dfa){
-    cout<<"transition table dfa:"<<endl;
-    for(auto it:transition_table_dfa){
-        cout<<it.first<<"->";
-        for(auto it2:it.second){
-            cout<<it2.first<<"->";
-            cout<<it2.second<<endl;
-        }
-        cout<<endl;
-    }
-}
 
 // to check if all the alphabets are present in the transition table
 map<char,map<int,set<int>>> check_all_are_present(map<char,map<int,set<int>>> transition_table_nfa){ 
@@ -160,6 +136,21 @@ void E_NFA_TO_NFA(map<char,vector<pair<char,int>>> transitions){
     transition_table_nfa = check_all_are_present(transition_table_nfa);
 
     print_transition_table(transition_table_nfa);
+}
+
+void print_transition_table(map<char,map<int,set<int>>> transition_table){
+    cout<<"transition table nfa:"<<endl;
+    for(auto it:transition_table){
+        cout<<it.first<<"->";
+        for(auto it2:it.second){
+            cout<<it2.first<<"->";
+            for(char it3:it2.second){
+                cout<<it3<<" ";
+            }
+            cout<<endl;
+        }
+        cout<<endl;
+    }
 }
 
 void NFA_TO_DFA(map<char,map<int,set<int>>> transition_table_nfa){
@@ -225,7 +216,17 @@ void NFA_TO_DFA(map<char,map<int,set<int>>> transition_table_nfa){
 
 }
 
-
+void print_dfa(map<string,map<int,string>> transition_table_dfa){
+    cout<<"transition table dfa:"<<endl;
+    for(auto it:transition_table_dfa){
+        cout<<it.first<<"->";
+        for(auto it2:it.second){
+            cout<<it2.first<<"->";
+            cout<<it2.second<<endl;
+        }
+        cout<<endl;
+    }
+}
 
 set<char> total_states(map<char,vector<pair<char,int>>> transitions_e_nfa_to_nfa){
     set<char> total_states;
@@ -245,6 +246,17 @@ set<int> set_of_alphabets(map<char,vector<pair<char,int>>> transitions){
         }
     }
     return alphabets;
+}
+
+// transitions for epsilon nfa to nfa
+void print_map(map<char,vector<pair<char,int>>> transitions){
+    for(auto it:transitions){
+        cout<<it.first<<"->";
+        for(auto it2:it.second){
+            cout<<"("<<it2.first<<","<<it2.second<<")";
+        }
+        cout<<endl;
+    }
 }
 
 int main(){
