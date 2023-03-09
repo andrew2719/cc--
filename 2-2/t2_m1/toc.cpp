@@ -53,12 +53,13 @@ map<char,map<int,set<int>>> final_transition_table_nfa(map<char,vector<pair<char
 map<char,set<char>> find_epsilon_closure(map<char,vector<pair<char,int>>> transitions){
     map<char,set<char>> epsilon_states;
     stack<char> st;
-
+    map<char,char> mask;
     for(auto state:transitions){
         for(auto transition:state.second){
 
             if(transition.second==5){
-               st.push(transition.first); 
+               st.push(transition.first);
+               mask[state.first] = transition.first; 
             }
         }
         epsilon_states[state.first].insert(state.first);
@@ -68,14 +69,15 @@ map<char,set<char>> find_epsilon_closure(map<char,vector<pair<char,int>>> transi
             epsilon_states[state.first].insert(top);
             for(auto transition:transitions[top]){
                 if(transition.second==5){
+                    if(mask[transition.first]!=top)
                     st.push(transition.first);
                 }
             }
         }
     }
     
-    for(auto it:transitions){
-        epsilon_states[it.first].insert(it.first);
+    for(auto it:states){
+        epsilon_states[it].insert(it);
     }
 
     return epsilon_states;
@@ -269,9 +271,11 @@ int main(){
     // 5 for epsilon
 
     // sample transitions
-    transitions_e_nfa_to_nfa['A'] = {{'A',1},{'B',0},{'B',5},{'C',5}};
-    transitions_e_nfa_to_nfa['B'] = {{'B',1},{'C',5}};
-    transitions_e_nfa_to_nfa['C'] = {{'C',1},{'C',0}};
+    transitions_e_nfa_to_nfa['A'] = {{'B',5},{'C',1}};
+    transitions_e_nfa_to_nfa['B'] = {{'C',1},{'C',5},{'C',0}};
+    transitions_e_nfa_to_nfa['C'] = {{'E',0},{'E',5},{'D',1}};
+    transitions_e_nfa_to_nfa['D'] = {{'C',0},{'A',5}};
+    transitions_e_nfa_to_nfa['E'] = {{'E',0},{'E',1}};
     
 
 
@@ -293,7 +297,19 @@ int main(){
     }*/
 
     states = total_states(transitions_e_nfa_to_nfa);
+
+    cout<<"states: "<<endl;
+    for(char state:states){
+        cout<<state<<" ";
+    }
+
     alphabets = set_of_alphabets(transitions_e_nfa_to_nfa);
+
+    cout<<endl<<"alphabets: "<<endl;
+    for(int alphabet:alphabets){
+        cout<<alphabet<<" ";
+    }
+    cout<<endl;
 
     E_NFA_TO_NFA(transitions_e_nfa_to_nfa);
 
