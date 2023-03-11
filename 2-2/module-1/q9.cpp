@@ -47,7 +47,7 @@ int main(){
 
     vector<pair<int,int>> coordinates = {{0, 0}, 
                                         {1, 0}, 
-                                        {1,1},
+                                        {1,2},
                                         {1,2}};
 
     /*for(int i=0;i<n;i++){

@@ -287,7 +287,7 @@ void print_dfa(map<string, map<int, string>> transition_table_dfa)
     }
 }
 
-
+// minimising here
 bool check_equivalent(string state1, string state2)
 {
     for (int alphabet : alphabets)
