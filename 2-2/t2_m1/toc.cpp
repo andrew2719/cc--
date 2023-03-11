@@ -164,7 +164,6 @@ void E_NFA_TO_NFA(map<char, vector<pair<char, int>>> transitions)
     print_transition_table(transition_table_nfa);
 }
 
-
 // clearing all the duplicates in the transition table of dfa {A : {0 : {B,C}, 1 : {A,B,C}}, B : ....like that
 map<string, map<int, string>> clearing_dups_in_dfa(map<string, map<int, string>> transition_table_dfa)
 {
@@ -189,6 +188,10 @@ map<string, map<int, string>> clearing_dups_in_dfa(map<string, map<int, string>>
 void NFA_TO_DFA(map<char, map<int, set<int>>> transition_table_nfa)
 {
     // converting the transition table of nfa to dfa
+    map<string,bool> state_masking;
+    int size = -1;
+    while(size!=state_masking.size()){
+        size = state_masking.size();
     set<string> new_states;
     for (auto it : transition_table_nfa)
     {
@@ -210,6 +213,8 @@ void NFA_TO_DFA(map<char, map<int, set<int>>> transition_table_nfa)
             /*if(s == ""){
                 cout<<"empty transition"<<endl;
             }*/
+
+            state_masking[s2] = true;
             new_states.insert(s);
         }
     }
@@ -229,9 +234,12 @@ void NFA_TO_DFA(map<char, map<int, set<int>>> transition_table_nfa)
                 for (char state : states)
                 {
                     transition_table_dfa[new_state][inner_map.first] += state;
+
                 }
             }
         }
+
+    }
     }
 
     transition_table_dfa = clearing_dups_in_dfa(transition_table_dfa);
@@ -307,6 +315,14 @@ void finding_equivalent_states()
         }
     }
 
+    for(auto it : total_final_states){
+        for(auto it2 : total_final_states){
+            if(check_equivalent(it,it2)){
+                flag = true;
+                equivalent_states[it].insert(it2);
+            }
+        }
+    }
     set<string> partioned_states;
 
     for(auto it :equivalent_states){
@@ -456,23 +472,6 @@ int main()
 
     final_states = {"C", "D"};
 
-    // input transitions
-    /*for(int i=0;i<n;i++){
-        cout<<"enter state:";
-        char state;
-        cin>>state;
-        cout<<"enter number of transitions:";
-        int m;
-        cin>>m;
-        for(int j=0;j<m;j++){
-            cout<<"enter transition "<<j+1<<":";
-            char input;
-            int output;
-            cin>>input>>output;
-            transitions[state].push_back({input,output});
-        }
-    }*/
-
     states = total_states(transitions_e_nfa_to_nfa);
 
     cout << "states: " << endl;
@@ -501,6 +500,5 @@ int main()
 
     finding_equivalent_states();
 
-    print_total_non_final_states_and_final_states();
-    //print_total_non_final_states_and_final_states();
+    
 }

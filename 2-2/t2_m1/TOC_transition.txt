@@ -1,0 +1,7 @@
+transitions_e_nfa_to_nfa['A'] = {{'B', 5}, {'C', 1}};
+    transitions_e_nfa_to_nfa['B'] = {{'C', 1}, {'C', 5}, {'C', 0}};
+    transitions_e_nfa_to_nfa['C'] = {{'E', 0}, {'E', 5}, {'D', 1}};
+    transitions_e_nfa_to_nfa['D'] = {{'C', 0}, {'A', 5}};
+    transitions_e_nfa_to_nfa['E'] = {{'E', 0}, {'E', 1}};
+
+    final_states = {"C", "D"};
