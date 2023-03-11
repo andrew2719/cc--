@@ -14,6 +14,7 @@ void E_NFA_TO_NFA(map<char, vector<pair<char, int>>> transitions);
 void NFA_TO_DFA(map<char, map<int, set<int>>> transition_table_nfa);
 set<char> total_states(map<char, vector<pair<char, int>>> transitions_e_nfa_to_nfa);
 set<int> set_of_alphabets(map<char, vector<pair<char, int>>> transitions);
+void total_final_and_non_final_states_dfa();
 // '$' is used to represent the empty set
 
 // all the global declarations
@@ -28,6 +29,7 @@ set<string> total_final_states; // total final states in the dfa
 set<string> total_non_final_states; // total non final states in the dfa
 map<string,set<string>> equivalent_states; // it is used to store the equivalent states map(just for calculation)
 set<set<string>> partioned_states; // final partitioned states
+map<set<string>,map<int,set<string>>> minimized_dfa;
 
 // transitions contains the transitions of all states {A : {(A,1),(B,0),(B,5),(C,5)}, B : {(B,1),(C,5)}, C : {(C,1),(C,0)}}
 
@@ -360,7 +362,39 @@ void finding_equivalent_states()
         cout << "no equivalent states" << endl;
     }
 }
-// this calculates the total final states and total non final states
+
+void print_minimized_dfa(){
+    // partioned states is a set of sets that contain the final states and non final states
+
+    for(auto it:partioned_states){
+        for(auto state : it){
+            
+            for(auto alphabet : alphabets){
+                // find the transitions of the state in the transition table of dfa
+
+                minimized_dfa[it][alphabet].insert(transition_table_dfa[state][alphabet]);
+            }
+        }
+    }
+
+    // printing the minimized dfa
+    cout<<"minimized dfa:"<<endl;
+    for(auto it : minimized_dfa){
+        for(auto sets: it.first){
+            cout<<sets<<" ";
+        }
+        cout<<"->";
+        for(auto it2 : it.second){
+            cout<<it2.first<<"->";
+            for(auto s : it2.second){
+                cout<<s<<" ";
+            }
+            cout<<endl;
+        }
+    }
+
+}
+// this calculates the total final states and total non final states from the dfa 
 void total_final_and_non_final_states_dfa()
 {
 
@@ -500,6 +534,8 @@ int main()
     print_total_non_final_states_and_final_states();
 
     finding_equivalent_states();
+
+    print_minimized_dfa();
 
     
 }
