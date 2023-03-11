@@ -344,6 +344,7 @@ void finding_equivalent_states()
         cout << endl;
     }
     // printing the equivalent states
+    /*
     if (flag)
     {
         cout << "equivalent states:" << endl;
@@ -360,7 +361,7 @@ void finding_equivalent_states()
     else
     {
         cout << "no equivalent states" << endl;
-    }
+    }*/
 }
 
 void print_minimized_dfa(){
@@ -378,7 +379,7 @@ void print_minimized_dfa(){
     }
 
     // printing the minimized dfa
-    cout<<"minimized dfa:"<<endl;
+    cout<<endl<<"--minimized dfa:--"<<endl;
     for(auto it : minimized_dfa){
         for(auto sets: it.first){
             cout<<sets<<" ";
@@ -391,6 +392,7 @@ void print_minimized_dfa(){
             }
             cout<<endl;
         }
+        cout<<endl;
     }
 
 }
@@ -432,6 +434,8 @@ void total_final_and_non_final_states_dfa()
 
 void print_total_non_final_states_and_final_states()
 {
+    // before minimising
+    cout<<"--before minimising--"<<endl;
     cout << "total_final_states: ";
     for (auto it : total_final_states)
     {
