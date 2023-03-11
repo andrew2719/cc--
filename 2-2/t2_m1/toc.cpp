@@ -21,12 +21,13 @@ map<char, vector<pair<char, int>>> transitions_e_nfa_to_nfa;
 map<char, set<char>> epsilon_closures;
 map<char, map<int, set<int>>> transition_table_nfa;
 map<string, map<int, string>> transition_table_dfa;
-set<int> alphabets;
-set<char> states;
-set<string> final_states;
-set<string> total_final_states;
-set<string> total_non_final_states;
-map<string,set<string>> equivalent_states;
+set<int> alphabets; // all the alphabets in the fa
+set<char> states; // all the states in the e-nfa
+set<string> final_states; // final states in the nfa
+set<string> total_final_states; // total final states in the dfa
+set<string> total_non_final_states; // total non final states in the dfa
+map<string,set<string>> equivalent_states; // it is used to store the equivalent states map(just for calculation)
+set<set<string>> partioned_states; // final partitioned states
 
 // transitions contains the transitions of all states {A : {(A,1),(B,0),(B,5),(C,5)}, B : {(B,1),(C,5)}, C : {(C,1),(C,0)}}
 
@@ -323,22 +324,22 @@ void finding_equivalent_states()
             }
         }
     }
-    set<string> partioned_states;
+    
 
     for(auto it :equivalent_states){
         // convert the set to string
-        string s = "";
-        for(auto it2 : it.second){
-            s += it2;
-        }
-        partioned_states.insert(s);
+        partioned_states.insert(it.second);
     }
 
     // printing the partioned states
     cout << "partioned states:" << endl;
     for (auto it : partioned_states)
     {
-        cout << it << endl;
+        for (auto it2 : it)
+        {
+            cout << it2 << " ";
+        }
+        cout << endl;
     }
     // printing the equivalent states
     if (flag)
