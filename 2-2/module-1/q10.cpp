@@ -74,6 +74,7 @@ int main() {
 	
 	cout<<"Total cost of spanning tree="<<sum<<endl;
 
+	// time complexity = O(ElogV)
 	
 
 }

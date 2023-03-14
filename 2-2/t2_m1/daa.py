@@ -40,19 +40,24 @@ def move_from_b_to_a(number, a_side, b_side):
 
 
 if __name__ == '__main__':
-    a_side = [int(x) for x in input("Enter time of each person: ").split()]
-    b_side = []
-    while len(a_side) != 0:
-        if len(a_side) == 1:
-            print("Just bring that number to B...")
-            break
-        if len(a_side) == 2:
-            two_left_case(a_side, b_side)
-            print("Total step: %s" % str(count))
-            break
-        elif len(a_side) == 3:
-            three_left_case(a_side, b_side)
-        else:
-            four_or_more_case(a_side, b_side)
+    while(True):
+        a_side = [int(x) for x in input("Enter time of each person: ").split()]
+        b_side = []
+        while len(a_side) != 0 and count <=12:
+            if len(a_side) == 1:
+                print("Just bring that number to B...")
+                break
+            if len(a_side) == 2:
+                two_left_case(a_side, b_side)
+                print("Total time count: %s" % str(count))
+                count = 0
+                
+                break
+            elif len(a_side) == 3:
+                three_left_case(a_side, b_side)
+            else:
+                four_or_more_case(a_side, b_side)
+
+            
 
 
