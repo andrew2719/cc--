@@ -22,7 +22,7 @@ def dec_to_twos_comp(num):
     return sign + bin_num
 
 
-ls = [random.randint(-32,32) for _ in range(10)]
+ls = [int(x) for x in input().split()]
 print(ls)
 print([dec_to_sign_mag(x) for x in ls])
 print([dec_to_twos_comp(x) for x in ls])

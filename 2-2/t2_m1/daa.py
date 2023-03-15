@@ -3,16 +3,22 @@ total_time = 0
 
 
 def two_left_case(a_side, b_side):
+    if count+max(a_side)>=x:
+        return
     move_from_a_to_b(a_side[0], a_side[1], a_side, b_side)
 
 
 def three_left_case(a_side, b_side):
+    if count+max(a_side)>=x:
+        return
     move_from_a_to_b(max(a_side), min(a_side), a_side, b_side)
     move_from_b_to_a(min(b_side), a_side, b_side)
     print("Move %s back to A side" % str(min(b_side)))
 
 
 def four_or_more_case(a_side, b_side):
+    if count+max(a_side)>=x:
+        return
     move_from_a_to_b(min(a_side), sorted(a_side)[1], a_side, b_side)
     move_from_b_to_a(min(b_side), a_side, b_side)
     move_from_a_to_b(max(a_side), sorted(a_side)[-2], a_side, b_side)
@@ -43,7 +49,8 @@ if __name__ == '__main__':
     while(True):
         a_side = [int(x) for x in input("Enter time of each person: ").split()]
         b_side = []
-        while len(a_side) != 0 and count <=12:
+        x = int(input("Enter the time limit: "))
+        while len(a_side) != 0 and count <x:
             if len(a_side) == 1:
                 print("Just bring that number to B...")
                 break
@@ -57,6 +64,9 @@ if __name__ == '__main__':
                 three_left_case(a_side, b_side)
             else:
                 four_or_more_case(a_side, b_side)
+
+        print("A side",*a_side)
+        print("B side",*b_side)
 
             
 
