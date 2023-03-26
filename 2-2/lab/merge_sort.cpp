@@ -67,7 +67,7 @@ int main()
     //cin>>n;
     int n =0;
     vector<int> a;
-    string line = "10 9";
+    string line = "7 3 4 10";
     //getline(cin, line);
     string word;
     stringstream ss(line);
