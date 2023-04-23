@@ -25,7 +25,15 @@ Node* insert(Node *node,int val) //  inserting the node
 }
 void zigzag(Node* root,int l,int r,int h)
 {
-
+    if(root==NULL)
+    return;
+    if(l>r)
+    {
+        h++;
+        cout<<root->data<<" ";
+    }
+    zigzag(root->left,l+1,r,h);
+    zigzag(root->right,l,r+1,h);
 }
 int solve(Node* root)
 {

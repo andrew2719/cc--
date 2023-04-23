@@ -43,9 +43,33 @@ void print(Node* head)
         cout<<prev->data<<" ";
         prev = prev->prev;
     }
-    
-
 }
+Node* swap_kth_node(int k,Node* head,int len){
+    Node* kth_from_start;
+    Node* kth_from_end;
+
+    Node* temp = head;
+
+    for(int i=1;i<k;i++)
+    temp = temp->next;
+    kth_from_start = temp;
+
+    temp = head;
+    for(int i=1;i<len-k+1;i++)
+    temp = temp->next;
+
+    kth_from_end = temp;
+
+
+    int temp_data = kth_from_start->data;
+
+    kth_from_start->data = kth_from_end->data;
+
+    kth_from_end->data = temp_data;
+
+    return head;
+}
+
 int main()
 {
     int n;
@@ -57,5 +81,6 @@ int main()
     print(head);
     cout<<'\n';
 
+    
     
 }

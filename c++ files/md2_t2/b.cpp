@@ -60,21 +60,21 @@ Node* balance(Node* n) {
   if (height(n->left) - height(n->right) > 1) {
     if (height(n->left->left) >= height(n->left->right)) {
       // Left-left case
-      cout << "Performing left-left rotation on node " << n->val << endl;
+      //cout << "Performing left-left rotation on node " << n->val << endl;
       return rotateLeftLeft(n);
     } else {
       // Left-right case
-      cout << "Performing left-right rotation on node " << n->val << endl;
+      //cout << "Performing left-right rotation on node " << n->val << endl;
       return rotateLeftRight(n);
     }
   } else if (height(n->right) - height(n->left) > 1) {
     if (height(n->right->right) >= height(n->right->left)) {
       // Right-right case
-      cout << "Performing right-right rotation on node " << n->val << endl;
+      //cout << "Performing right-right rotation on node " << n->val << endl;
       return rotateRightRight(n);
     } else {
       // Right-left case
-      cout << "Performing right-left rotation on node " << n->val << endl;
+      //cout << "Performing right-left rotation on node " << n->val << endl;
       return rotateRightLeft(n);
     }
   } else {
@@ -106,6 +106,22 @@ void preorder(Node* n) {
   preorder(n->right);
 }
 
+void post_order(Node *n){
+    if(!n) return;
+    post_order(n->left);
+    post_order(n->right);
+    cout<<n->val<<" ";
+}
+
+void inorder(Node *n){
+    if(!n) return;
+    inorder(n->left);
+    cout<<n->val<<" ";
+    inorder(n->right);
+}
+
+
+
 int main() {
   /*
   int a[] = {1,2,3};
@@ -125,7 +141,7 @@ int main() {
     }
     preorder(root);
   }*/
-  int a[] = {5,3,7,2,1,9,8,10};
+  int a[] = {1,2,3,4,5,6,7};
   int n = sizeof(a)/sizeof(a[0]);
   Node* root = nullptr;
   root = insert(root, a[0]);
@@ -133,6 +149,10 @@ int main() {
     root = insert(root, a[i]);
   }
   //preorder(root);
+  post_order(root);
+  cout<<endl;
   preorder(root);
   cout << endl;
+
+  inorder(root);
 }

@@ -1,83 +1,168 @@
-// C program for the above approach
-
-#include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
-
-// A structure to represent a job
-typedef struct Job {
-
-	char id; // Job Id
-	int dead; // Deadline of job
-	int profit; // Profit if job is over before or on
-				// deadline
-} Job;
-
-// This function is used for sorting all jobs according to
-// profit
-int compare(const void* a, const void* b)
+#include<stdio.h>
+int n;
+int vinay(int w[][n],int c[][n],int r[][n],int l,int h,int p[],int q[])
 {
-	Job* temp1 = (Job*)a;
-	Job* temp2 = (Job*)b;
-	return (temp2->profit - temp1->profit);
+    //printf("v");
+	int min=0;
+	int i,j;
+	w[l][h]=q[l];
+
+	for(i=l;i<h;i++)
+	w[l][h]=w[l][h]+p[i]+q[i+1];
+	int k=0;
+	min=10000;
+	for(i=l+1;i<=h;i++)
+	{
+		int o= c[l][i-1]+c[i][h];
+		if(o<min)
+		{
+		min=o;
+		k=i;
+		}
+	}
+    //printf("w : %d\n",w[l][h]);
+	c[l][h]=min+w[l][h];
+	r[l][h]=k;
+
 }
 
-// Find minimum between two numbers.
-int min(int num1, int num2)
+void fun(int r[][n],int i,int j,int k)
 {
-	return (num1 > num2) ? num2 : num1;
-}
+	if(i==j)
+	return;
 
-// Returns maximum profit from jobs
-void printJobScheduling(Job arr[], int n)
-{
-	// Sort all jobs according to decreasing order of profit
-	qsort(arr, n, sizeof(Job), compare);
-
-	int result[n]; // To store result (Sequence of jobs)
-	bool slot[n]; // To keep track of free time slots
-
-	// Initialize all slots to be free
-	for (int i = 0; i < n; i++)
-		slot[i] = false;
-
-	// Iterate through all given jobs
-	for (int i = 0; i < n; i++) {
+	printf("Left child of %d is :: %d\n",k,r[i][k-1]);
+	printf("Right child of %d is :: %d\n",k,r[k][j]);
 	
-		// Find a free slot for this job (Note that we start
-		// from the last possible slot)
-		for (int j = min(n, arr[i].dead) - 1; j >= 0; j--) {
-		
-			// Free slot found
-			if (slot[j] == false) {
-				result[j] = i; // Add this job to result
-				slot[j] = true; // Make this slot occupied
-				break;
-			}
+	int y=r[i][j];
+	int q=r[i][j]-1;
+	int p=r[i][y-1];
+	int t=r[i][j];
+	int o=r[t][j];
+	fun(r,i,q,p);
+	fun(r,t,j,o);
+}
+int main()
+{
+	scanf("%d",&n);
+	int p[n];
+	int q[n+1];
+	int i,j;
+	for(i=0;i<n;i++)
+	scanf("%d",&p[i]);
+	for(i=0;i<n+1;i++)
+	scanf("%d",&q[i]);
+
+	int w[n+1][n+1];
+	int c[n+1][n+1];
+	int r[n+1][n+1];
+
+	n=n+1;
+	for(i=0;i<n;i++)
+	{
+		for(j=0;j<n;j++)
+		{
+			if(i==j)
+			{
+				w[i][j]=q[i];
+				c[i][j]=0;
+				r[i][j]=0;
+			}	
 		}
 	}
 
-	// Print the result
-	for (int i = 0; i < n; i++)
-		if (slot[i])
-			printf("%c ", arr[result[i]].id);
+	for(i=0;i<n;i++)
+	{
+		for(j=0;j<=i;j++)
+		{
+			if(i==j)
+			{
+				c[i][j]=0;
+				r[i][j]=0;
+			}	
+		}
+	}
+	int k=1;
+	int m=0;
+	while(k!=n+1)
+	{
+	for(i=0;i<n;i++)
+	{
+		for(j=0;j<n;j++)
+		{
+		    //printf("%d %d\n",i+k,j);
+			if((i+k)==j)
+			{
+			    //printf("%d %d\n",i,j);
+				vinay(w,c,r,i,j,p,q);
+			}
+		}
+		
+	}
+	k=k+1;
+	}
+	printf("Optimal BST is :: w values are:\n");
+	k=0;
+	while(k!=n+1)
+	{
+	for(i=0;i<n;i++)
+	{
+		for(j=0;j<n;j++)
+		{
+			if((i+k)==j)
+			{
+			    printf("%d ",w[i][j]);
+			}
+		}
+	}
+	k=k+1;
+	if(k!=n)
+	printf("\n");
+	}
+	k=0;
+	printf("c values are:\n");
+
+	while(k!=n+1)
+	{
+	for(i=0;i<n;i++)
+	{
+		for(j=0;j<n;j++)
+		{
+			if((i+k)==j)
+			{
+			    printf("%d ",c[i][j]);
+			}
+		}
+	}
+	k=k+1;
+	if(k!=n)
+	printf("\n");
+	}
+	k=0;
+	printf("r values are:\n");
+
+	while(k!=n+1)
+	{
+	for(i=0;i<n;i++)
+	{
+		for(j=0;j<n;j++)
+		{
+			if((i+k)==j)
+			{
+			    printf("%d ",r[i][j]);
+			}
+		}
+	}
+	k=k+1;
+	if(k!=n)
+	printf("\n");
+	}
+
+	 int v=n-1;
+	printf("Root is %d\n",r[0][v]);
+	k=r[0][v];
+	fun(r,0,v,k);
+	
+
+	
 }
-
-// Driver's code
-int main()
-{
-	Job arr[] = { { 'a', 2, 100 },
-				{ 'b', 1, 19 },
-				{ 'c', 2, 27 },
-				{ 'd', 1, 25 },
-				{ 'e', 3, 15 } };
-	int n = sizeof(arr) / sizeof(arr[0]);
-	printf(
-		"Following is maximum profit sequence of jobs \n");
-
-	// Function call
-	printJobScheduling(arr, n);
-	return 0;
-}
-
-// This code is contributed by Aditya Kumar (adityakumar129)

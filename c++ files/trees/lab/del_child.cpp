@@ -97,7 +97,7 @@ int main()
     {
         cin>>a[i];
     }*/
-    int a[] = {50};int n = sizeof(a)/sizeof(a[0]);
+    int a[] = {50,20};int n = sizeof(a)/sizeof(a[0]);
     Node *root = nullptr;
     root = insert(root,a[0]);
     for(int i=1;i<n;i++)
