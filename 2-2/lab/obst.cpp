@@ -1,151 +1,79 @@
-#include <stdio.h>
-#include<stdlib.h>
-#define NMAX 20
 
-typedef struct OBST{
-	int KEY;
-	struct OBST *left, *right;
-}OBST;
+#include <iostream>
+#include <climits>
+#include <vector>
+using namespace std;
 
-int C[NMAX][NMAX]; //cost matrix
-int W[NMAX][NMAX]; //weight matrix
-int R[NMAX][NMAX]; //root matrix
-int q[NMAX]; //unsuccesful searches
-int p[NMAX]; //frequencies 7
+// Function to compute the values of w(i,j), c(i,j), and r(i,j)
+void OBST(int n, vector<double> p, vector<double> q, vector<vector<double>>& w, vector<vector<double>>& c, vector<vector<int>>& r) {
+    // Initialize w and c
+    for (int i = 0; i <= n; i++) {
+        w[i+1][i] = q[i];
+        c[i+1][i] = 0;
+    }
 
-int NUMBER_OF_KEYS; //number of keys in the tree
-int KEYS[NMAX];
-OBST *ROOT;
-
-void COMPUTE_W_C_R(){
-	int x, min;
-	int i, j, k, h, m;
-
-	//Construct weight matrix W
-	for(i = 0; i <= NUMBER_OF_KEYS; i++) {
-		W[i][i] = q[i];
-		for(j = i + 1; j <= NUMBER_OF_KEYS; j++)
-			W[i][j] = W[i][j-1] + p[j] + q[j];
-	}
-
-	//Construct cost matrix C and root matrix R
-	for(i = 0; i <= NUMBER_OF_KEYS; i++)
-		C[i][i] = W[i][i];
-	for(i = 0; i <= NUMBER_OF_KEYS - 1; i++) {
-		j = i + 1;
-		C[i][j] = C[i][i] + C[j][j] + W[i][j];
-		R[i][j] = j;
-	}
-	for(h = 2; h <= NUMBER_OF_KEYS; h++)
-		for(i = 0; i <= NUMBER_OF_KEYS - h; i++) {
-			j = i + h;
-			m = R[i][j-1];
-			min = C[i][m-1] + C[m][j];
-			for(k = m+1; k <= R[i+1][j]; k++){
-				x = C[i][k-1] + C[k][j];
-				if(x < min) {
-					m = k;
-					min = x;
-				}
-			}
-			C[i][j] = W[i][j] + min;
-			R[i][j] = m;
-		}
-
-	//Display weight matrix W
-	printf("\nThe weight matrix W:\n");
-	for(i = 0; i <= NUMBER_OF_KEYS; i++){
-		for(j = i; j <= NUMBER_OF_KEYS; j++)
-			printf("%d ", W[i][j]);
-		printf("\n");
-	}
-
-	//Display Cost matrix C
-	printf("\nThe cost matrix C:\n");
-	for(i = 0; i <= NUMBER_OF_KEYS; i++) {
-		for(j = i; j <= NUMBER_OF_KEYS; j++)
-			printf("%d ", C[i][j]);
-		printf("\n");
-	}
-
-	//Display root matrix R 8
-
-	printf("\nThe root matrix R:\n");
-	for(i = 0; i <= NUMBER_OF_KEYS; i++) {
-		for(j = i; j <= NUMBER_OF_KEYS; j++)
-			printf("%d ", R[i][j]);
-		printf("\n");
-	}
+    // Compute the values of w and c using a bottom-up approach
+    for (int l = 1; l <= n; l++) {
+        for (int i = 1; i <= n-l+1; i++) {
+            int j = i+l-1;
+            w[i][j] = w[i][j-1] + p[j] + q[j];
+            c[i][j] = INT_MAX;
+            for (int k = i; k <= j; k++) {
+                double t = c[i][k-1] + c[k+1][j] + w[i][j];
+                if (t < c[i][j]) {
+                    c[i][j] = t;
+                    r[i][j] = k;
+                }
+            }
+        }
+    }
 }
 
-//Construct the optimal binary search tree
-OBST *CONSTRUCT_OBST(int i, int j){
-	OBST *p;
+int main() {
+    // Number of identifiers
+    int n = 4;
 
-	if(i == j)
-		p = NULL;
-	else{
-		p = (OBST*) calloc(1, sizeof(OBST));
-		p->KEY = KEYS[R[i][j]];
-		p->left = CONSTRUCT_OBST(i, R[i][j] - 1); //left subtree
-		p->right = CONSTRUCT_OBST(R[i][j], j); //right subtree
-	}
-	return p;
-}
+    // Identifier set
+    vector<string> id = {"cout", "float", "if", "while"};
 
-//Display the optimal binary search tree
-void DISPLAY(OBST *ROOT, int nivel){
-	int i;
-	if(ROOT != 0) {
-		DISPLAY(ROOT->right, nivel+1);
-		for(i = 0; i <= nivel; i++)
-			printf(" ");
-		printf("%d\n", ROOT->KEY);
-		DISPLAY(ROOT->left, nivel + 1);
-	}
-}
-void OPTIMAL_BINARY_SEARCH_TREE()
-{
-	float average_cost_per_weight;
+    // Probabilities
+    vector<double> p = {0, 1.0/20, 1.0/5, 1.0/10, 1.0/20};
+    vector<double> q = {1.0/5, 1.0/10, 1.0/5, 1.0/20, 1.0/20};
 
-	COMPUTE_W_C_R();
-	printf("C[0] = %d W[0] = %d\n", C[0][NUMBER_OF_KEYS], W[0][NUMBER_OF_KEYS]);
-	average_cost_per_weight = C[0][NUMBER_OF_KEYS]/(float)W[0][NUMBER_OF_KEYS];
-	printf("The cost per weight ratio is: %f\n", average_cost_per_weight);
-	ROOT = CONSTRUCT_OBST(0, NUMBER_OF_KEYS);
-}
-int main(){
-	int i, k;
+    // Arrays to store the values of w(i,j), c(i,j), and r(i,j)
+    vector<vector<double>> w(n+2,vector<double>(n+1));
+    vector<vector<double>> c(n+2,vector<double>(n+1));
+    vector<vector<int>> r(n+2,vector<int>(n+1));
 
-	setbuf(stdout,NULL);
-	printf("Input number of keys: ");
-	scanf("%d", &NUMBER_OF_KEYS);
-	for(i = 1; i <= NUMBER_OF_KEYS; i++) {
-		printf("key[%d]= ",i);
-		scanf("%d", &KEYS[i]);
-		printf(" frequency = ");
-		scanf("%d",&p[i]);
-	}
+    // Compute the values of w(i,j), c(i,j), and r(i,j)
+    OBST(n, p, q, w, c, r);
 
-    
-	for(i = 0; i <= NUMBER_OF_KEYS; i++) {
-		printf("q[%d] = ", i);
+    // Print the values of w(i,j), c(i,j), and r(i,j)
+    cout << "w(i,j):" << endl;
+    for (int i = 1; i <= n+1; i++) {
+        for (int j = 0; j <= n; j++) {
+            cout << w[i][j] << " ";
+        }
+        cout << endl;
+    }
+    cout << endl;
 
-		scanf("%d",&q[i]);
-	}
-	do {
-		printf("1.Construct tree\n2.Display tree\n3.Exit\n");
-		scanf("%d", &k);
-		switch(k) {
-		case 1:
-			OPTIMAL_BINARY_SEARCH_TREE();
-			break;
-		case 2:
-			DISPLAY(ROOT, 0);
-			break;
-		case 3:
-			k = -1;
-			break;
-		}
-	} while (k != -1);
+    cout << "c(i,j):" << endl;
+    for (int i = 1; i <= n+1; i++) {
+        for (int j = 0; j <= n; j++) {
+            cout << c[i][j] << " ";
+        }
+        cout << endl;
+    }
+    cout << endl;
+
+    cout << "r(i,j):" << endl;
+    for (int i = 1; i <= n+1; i++) {
+        for (int j = 0; j <= n; j++) {
+            cout << r[i][j] << " ";
+        }
+        cout << endl;
+    }
+
+    return 0;
 }

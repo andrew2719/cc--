@@ -26,10 +26,9 @@ int tsp(int i, set<int> S, vector<vector<int>>& dist, map<pair<int, set<int>>, i
 }
 
 int main() {
-    int n; // number of cities
+    int n;
     cin >> n;
 
-    // read the distances between cities
     vector<vector<int>> dist(n, vector<int>(n));
     for (int i = 0; i < n; ++i) {
         for (int j = 0; j < n; ++j) {
@@ -71,7 +70,6 @@ int main() {
     
 
     // print the result
-    cout << "Minimum cost: " << min_cost << endl;
     cout << "Path: ";
     for (int i = 0; i < n; ++i) {
         cout << alphabets[path[i]] << "->";
@@ -79,6 +77,7 @@ int main() {
     }
     cout << alphabets[0] << endl;
     cout << endl;
+    cout << "Minimum cost: " << min_cost << endl;
 
     return 0;
 }
