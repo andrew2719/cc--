@@ -24,14 +24,15 @@ void bottomview(map<int,int> &mp,Node* root,int h){
 
 
 //topview
-void topview(map<int,int> &mp,Node* root,int h){
+void topview(map<int,int> &mp,Node* root,int h,map<int,int> &sum){
 
     if(root==NULL)
     return ;
     if(mp[h]!=0)
     mp[h] = root->data;
-    topview(mp,root->left,h-1);
-    topview(mp,root->right,h+1);
+    sum[h] += root->data;
+    topview(mp,root->left,h-1,sum);
+    topview(mp,root->right,h+1,sum);
 }
 
 
@@ -68,8 +69,13 @@ int main(){
     map<int,int> mp;
     inorder(head);
     cout<<"\n";
-    bottomview(mp,head,0);
-    for(auto it:mp){
+    map<int,int> sum;
+    //bottomview(mp,head,0,sum);
+    topview(mp,head,0,sum);
+    // for(auto it:mp){
+    //     cout<<it.second<<" ";
+    // }
+    for(auto it:sum){
         cout<<it.second<<" ";
     }
 
