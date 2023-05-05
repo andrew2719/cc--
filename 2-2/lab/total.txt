@@ -1,0 +1,24 @@
+total questions in DAA lab
+
+1- merge sort
+2- quick sort
+3 -linear search
+4 - binary search
+5 - strassens matrix multiplication
+-----greedy------
+6 - job sequencing with deadline
+7 - knapsack
+8 - minimum spanning tree
+
+----------dynamic programming-------
+9 - all pair shortest path
+10 - optimal binary search tree
+11 - matrix chain multiplication
+12 - travelling salesman problem
+
+
+----------backtracking-------
+13 - n queen problem
+
+---branch and bound---
+14 - 0/1 knapsack
