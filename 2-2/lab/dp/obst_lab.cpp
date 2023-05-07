@@ -70,18 +70,6 @@ int main()
 			}	
 		}
 	}
-
-	for(i=0;i<n;i++)
-	{
-		for(j=0;j<=i;j++)
-		{
-			if(i==j)
-			{
-				c[i][j]=0;
-				r[i][j]=0;
-			}	
-		}
-	}
 	int k=1;
 	int m=0;
 	while(k!=n+1)
