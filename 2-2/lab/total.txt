@@ -19,6 +19,7 @@ total questions in DAA lab
 
 ----------backtracking-------
 13 - n queen problem
+14 - sum of subsets
 
 ---branch and bound---
 14 - 0/1 knapsack
