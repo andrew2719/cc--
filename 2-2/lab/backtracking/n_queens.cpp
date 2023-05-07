@@ -1,62 +1,59 @@
-#include <stdio.h>
-#include <math.h>
+#include<bits/stdc++.h>
+using namespace std;
 
-int board[20], count;
 
-int main()
-{
-    int n, i, j;
-    void queen(int row, int n);
-    scanf("%d", &n);
-    queen(1, n);
-    printf("\n\nTotal sol=%d", count);
-    return 0;
+bool is_safe(vector<vector<char>> board,int r,int c){
+    // row
+    for(int i=0;i<r;i++){
+        if(board[i][c] == 'Q'){
+            return false;
+        }
+    }
+    //left diagonal
+    for(int i=r,j=c;i>=0 && j>=0;i--,j--){
+        if(board[i][j]=='Q'){
+            return false;
+        }
+    }
+    //right diagonal
+    for(int i=r,j=c;i>=0 && j<board.size();i--,j++){
+        if(board[i][j]=='Q'){
+            return false;
+        }
+    }
+    return true;
 }
-void print(int n)
-{
-    int i, j;
-    printf("\n\nSolution: %d", ++count);
 
-    for (i = 1; i <= n; ++i)
 
-        for (i = 1; i <= n; ++i)
-        {
-            printf("\n\n");
-            for (j = 1; j <= n; ++j)
-            {
-                if (board[i] == j)
-                    printf("Q ");
-                else
-                    printf("+ ");
+void n_queens(vector<vector<char>> &board,int r){
+
+    if(r==board.size()){
+        for(int i=0;i<board.size();i++){ // printing if reached to the end
+            for(int j=0;j<board.size();j++){
+                cout<<board[i][j]<<" ";
             }
+            cout<<endl;
         }
-}
-
-int place(int row, int column)
-{
-    int i;
-    for (i = 1; i <= row - 1; ++i)
-    {
-        if (board[i] == column)
-            return 0;
-        else if (abs(board[i] - column) == abs(i - row))
-            return 0;
+        cout<<endl;
+        return;
     }
 
-    return 1;
-}
-void queen(int row, int n)
-{
-    int column;
-    for (column = 1; column <= n; ++column)
-    {
-        if (place(row, column))
-        {
-            board[row] = column;
-            if (row == n)
-                print(n);
-            else
-                queen(row + 1, n);
+
+    for(int i=0;i<board.size();i++){// traversing through the columns...
+//starting at 0 and to the end placing the queen at each column and checking for all the combinations
+        if(is_safe(board,r,i)){
+            board[r][i] = 'Q';
+            n_queens(board,r+1);
+            board[r][i] = '+';
         }
     }
+}
+
+
+int main(){
+    int n;
+    cin>>n;
+
+    vector<vector<char>> board(n, vector<char>(n, '+'));
+    n_queens(board,0);
 }
