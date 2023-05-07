@@ -1,28 +1,42 @@
-#include <bits/stdc++.h>
-using namespace std;
-
-int min(int a, int b)
-{
-    return a < b ? a : b;
-}
-
+#include <stdio.h>
 int main()
 {
     int n;
-    cin >> n;
-    int a[n][n];
-    for (int i = 0; i < n; i++)
-        for (int j = 0; j < n; j++)
-            cin >> a[i][j];
-    for (int k = 0; k < n; k++)
-        for (int i = 0; i < n; i++)
-            for (int j = 0; j < n; j++)
-                a[i][j] = min(a[i][j], a[i][k] + a[k][j]);
-    for (int i = 0; i < n; i++)
+    scanf("%d", &n);
+    int a[n][n], i, j, k, l = 0;
+    for (i = 0; i < n; i++)
     {
-        for (int j = 0; j < n; j++)
-            cout << a[i][j] << " ";
-        cout << endl;
+        for (j = 0; j < n; j++)
+        {
+            scanf("%d", &a[i][j]);
+            if (a[i][j] == 0)
+            {
+                a[i][j] = 999;
+            }
+        }
     }
-    return 0;
+    for (k = 0; k < n; k++)
+    {
+        for (i = 0; i < n; i++)
+        {
+            for (j = 0; j < n; j++)
+            {
+                l = a[i][k] + a[k][j];
+                a[i][j] = a[i][j] < l ? a[i][j] : l;
+            }
+        }
+    }
+    for (i = 0; i < n; i++)
+    {
+        a[i][i] = 0;
+    }
+    for (i = 0; i < n; i++)
+    {
+        for (j = 0; j < n; j++)
+        {
+            printf("%d ", a[i][j]);
+        }
+        printf("\n");
+        
+    }
 }

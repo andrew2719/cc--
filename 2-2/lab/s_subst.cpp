@@ -1,7 +1,7 @@
+
+
 #include<bits/stdc++.h>
 using namespace std;
-
-
 
 void s_subst(vector<int> a,int k,int sum,int i,vector<int> &x){
     if(sum==k){
