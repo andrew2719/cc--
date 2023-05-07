@@ -5,7 +5,6 @@ struct mat
     int w, c, r;
 };
 int arr[100], n;
-struct mat a[100][100];
 int mind(int arr[], int size)
 {
     int minIndex = 0;
@@ -18,7 +17,7 @@ int mind(int arr[], int size)
     }
     return minIndex;
 }
-int print(struct mat a[][100], int i, int j)
+int print(struct mat a[][n + 1], int i, int j)
 {
     printf("Left child of %d is :: %d\n", a[i][j].r, a[i][a[i][j].r - 1].r);
     printf("Right child of %d is :: %d\n", a[i][j].r, a[a[i][j].r][j].r);
@@ -45,7 +44,7 @@ int main()
         scanf("%d", &c[i]);
     }
     int l = n;
-    //struct mat a[n + 1][n + 1];
+    struct mat a[n + 1][n + 1];
     for (int d = 0; d <= n; d++)
     {
         for (i = 0; i <= n; i++)
@@ -67,7 +66,7 @@ int main()
                     {
                         arr[k++] = a[i][n2 - 1].c + a[n2][j].c;
                     }
-                    //printf("\n");
+                    printf("\n");
                     a[i][j].c = arr[mind(arr, k)] + a[i][j].w;
                     a[i][j].r = mind(arr, k) + i + 1;
                 }

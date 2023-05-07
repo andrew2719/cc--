@@ -9,8 +9,8 @@ struct Job {
 
 	char id; // Job Id
 	int dead; // Deadline of job
-	int profit; // Profit if job is over before or on
-	int slot=0;		// deadline
+	int profit; // Profit if job is over before or on deadline
+	int slot=0;		
 };
 
 // Comparator function for sorting jobs
@@ -54,11 +54,7 @@ void printJobScheduling(Job arr[], int n)
         else
             cout<<"REJECTED\n";
     }
-
-
-    
-
-    
+ 
 }
 
 // Driver's code
@@ -71,10 +67,7 @@ int main()
 				{ 'e', 3, 15 } };
 
 	int n = sizeof(arr) / sizeof(arr[0]);
-	cout << "Following is maximum profit sequence of jobs "
-			"\n";
 
-	// Function call
 	printJobScheduling(arr, n);
 	return 0;
 }
