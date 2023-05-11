@@ -61,15 +61,15 @@ int second_chance_replace(vector<Page>& pages, int& clock_hand) {
 }
 
 int main() {
-    vector<Page> pages = {{0, 126, 280, 0, 1},
-                          {1, 230, 256, 1, 0},
+    vector<Page> pages = {{0, 126, 280, 1, 0},
+                          {1, 230, 265, 0, 1},
                           {2, 140, 270, 0, 0},
                           {3, 110, 285, 1, 1}};
     int clock_hand = 0;
-    cout << "NRU replaces page " << nru_replace(pages) << endl;
-    cout << "FIFO replaces page " << fifo_replace(pages) << endl;
-    cout << "LRU replaces page " << lru_replace(pages) << endl;
-    cout << "Second chance replaces page " << second_chance_replace(pages, clock_hand) << endl;
+    cout << "NRU replaces page " << nru_replace(pages) << endl;// r,m = 0 and least loaded
+    cout << "FIFO replaces page " << fifo_replace(pages) << endl;// least loaded
+    cout << "LRU replaces page " << lru_replace(pages) << endl;// least refernce
+    cout << "Second chance replaces page " << second_chance_replace(pages, clock_hand) << endl;// least reference and r = 0
     return 0;
 }
 
