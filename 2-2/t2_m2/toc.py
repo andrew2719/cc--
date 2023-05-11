@@ -1,39 +1,30 @@
-# conversion of context free grammar to pushdown automata of {ww^R | w ∈ {a, b}*}
-# where w^R is the reverse of w
+# accepted strings are "aSa" and "bSb"
+# where S can be replaced with "aSb" or "bSa" or epsilon
+# S -> aSb | bSa | epsilon
+st = ""
+flag = 0
+def check_cfg(st,s):
+    # base case 
+    if(len(st)>len(s)):
+        return 
 
-cfg = {"S": ["aSa", "bSb"]}
-
-s = input("Enter a string: ")
-
-def check(s):
-    # if first half and second half are mirror images
-    if s[:len(s)//2] == s[len(s)//2:][::-1]:
-        return True
-    else:
-        return False
+    if(st==s):
+        print("Accepted")
+        global flag
+        flag = 1
+        return
     
-def toc(s):
+    first = st[:len(st)//2]
+    second = st[len(st)//2:]
+    check_cfg(first+"aa"+second, s)
+    check_cfg(first+"bb"+second, s)
+    #print(st)
 
-    # if string is empty
-    if(check(s)):
-        return True
-    
-    if s == "":
-        return True
 
-    # if string is not empty
-    else:
-        for i in cfg:
-            for j in cfg[i]:
-                if s.startswith(j):
-                    # print(s, j)
-                    if toc(s[len(j):]):
-                        return True
-        return False
-    
-if toc(s):
-    print("Accepted")
-else:
-    print("Rejected")
+s = input("Enter string: ")
+check_cfg(st,s)
+if(flag==0):
+    print("Not Accepted")
 
-# Input: aabbaa
+
+

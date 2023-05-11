@@ -21,4 +21,4 @@ for i in range(len(u+v), len(s)):
         break
 # checking for uv^2wx^2y
 print(u, v, w,x, y)
-print("Not a CFL")
+print((len(u+v*2+w+x*2+y)==len(s)))
