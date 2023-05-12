@@ -10,8 +10,8 @@ n = len(cut_pieces)
 # we traverse all the possible combinations and print  min cost and the total no of types of rods that are used
 
 
-r1_remains = []
-r2_remains = []
+# r1_remains = []
+# r2_remains = []
 def min_cost_fun(r1_remains,r2_remains,i):
     if i == n:
         return 0
@@ -20,18 +20,21 @@ def min_cost_fun(r1_remains,r2_remains,i):
     if len(r1_remains):
         for x in range(len(r1_remains)):
             if r1_remains[x]>=cut_pieces[i]:
-                r1_remains[x] = r1_remains[x]-cut_pieces[i]
-                min_cost = min(min_cost,costs[0]+min_cost_fun(r1_remains,r2_remains,i+1))
-                r1_remains[x] = r1_remains[x]+cut_pieces[i]
+                remaining = r1_remains[x]-cut_pieces[i]
+                new_r1_remains = []
+                new_r1_remains.append(remaining)
+                print("new_remains",new_r1_remains)
+                min_cost = min(min_cost,costs[0]+min_cost_fun(new_r1_remains,r2_remains,i+1))
 
 
 
     if len(r2_remains):
         for x in range(len(r2_remains)):
             if r2_remains[x]>=cut_pieces[i]:
-                r2_remains[x] = r2_remains[x]-cut_pieces[i]
-                min_cost = min(min_cost,costs[1]+min_cost_fun(r1_remains,r2_remains,i+1))
-                r2_remains[x] = r2_remains[x]+cut_pieces[i]
+                remaining = r2_remains[x]-cut_pieces[i]
+                new_r2_remains = []
+                new_r2_remains.append(remaining)
+                min_cost = min(min_cost,costs[1]+min_cost_fun(r1_remains,new_r2_remains,i+1))
             
 
     if rods[0]>=cut_pieces[i]:
@@ -46,7 +49,9 @@ def min_cost_fun(r1_remains,r2_remains,i):
 
     return min_cost
 
-print(min_cost_fun(r1_remains,r2_remains,0))
+    
+
+print(min_cost_fun([],[],0))
 
     
 

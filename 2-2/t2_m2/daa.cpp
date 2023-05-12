@@ -2,26 +2,49 @@
 using namespace std;
 
 
-int min_cost_using_recursion(vector<int> rods, vector<int> costs,vector<int> cut_pieces, int i,int remaining){
+vector<int> rods = {5,10};
+vector<int> costs = {2,3};    
+vector<int> cut_pieces = {1,2,3,4,5,6,7,8,9,10};
+int min_cost_using_recursion(vector<int> r1_remains,vector<int> r2_remains,int i){
 
     if(i==cut_pieces.size()){
         return 0;
     }
     int min_cost = INT_MAX;
+    if(r1_remains.size()>0){
+        for(int x=0;x<r1_remains.size();i++){
+            if(r1_remains[i]>=cut_pieces[i]){
+                int remaining = r1_remains[i]-cut_pieces[i];
+                vector<int> r1_remains_new;
+                r1_remains_new.push_back(remaining);
+                min_cost = min(min_cost,costs[0]+min_cost_using_recursion(r1_remains_new,r2_remains,i+1));
+            }
+        }
+    }
+
+    if(r2_remains.size()>0){
+        for(int x=0;x<r2_remains.size();i++){
+            if(r2_remains[i]>=cut_pieces[i]){
+                int remaining = r2_remains[i]-cut_pieces[i];
+                vector<int> r2_remains_new;
+                r2_remains_new.push_back(remaining);
+                min_cost = min(min_cost,costs[1]+min_cost_using_recursion(r1_remains,r2_remains_new,i+1));
+            }
+        }
+    }
+
     if(rods[0]>=cut_pieces[i]){
-        int cost_with_rod_1 = min(min_cost,costs[0]+min_cost_using_recursion(rods,costs,cut_pieces,i+1,rods[0]-cut_pieces[i]+remaining));
-        min_cost = min(min_cost,cost_with_rod_1);
+        r1_remains.push_back(rods[0]-cut_pieces[i]);
+        min_cost = min(min_cost,costs[0]+min_cost_using_recursion(r1_remains,r2_remains,i+1));
+        r1_remains.pop_back();
     }
 
     if(rods[1]>=cut_pieces[i]){
-        int cost_with_rod_2 = min(min_cost,costs[1]+min_cost_using_recursion(rods,costs,cut_pieces,i+1,rods[1]-cut_pieces[i]+remaining));
-        min_cost = min(min_cost,cost_with_rod_2);
+        r2_remains.push_back(rods[1]-cut_pieces[i]);
+        min_cost = min(min_cost,costs[1]+min_cost_using_recursion(r1_remains,r2_remains,i+1));
+        r2_remains.pop_back();
     }
 
-    if(remaining>=cut_pieces[i]){
-        int cost_with_remaining = min_cost_using_recursion(rods, costs, cut_pieces, i+1, remaining-cut_pieces[i]);
-        min_cost = min(min_cost, cost_with_remaining);
-    }
     return min_cost;
 }
 
@@ -53,9 +76,6 @@ int using_dp(vector<int> rods, vector<int> costs,vector<int> cut_pieces, int i,i
 
 
 int main(){
-    vector<int> rods = {5,10};
-    vector<int> costs = {2,3};    
-    vector<int> cut_pieces = {1,2,3,4,5,6,7,8,9,10};
 
     // max piece that can remain
     int dp_n;
@@ -65,8 +85,9 @@ int main(){
     vector<vector<int>> dp(cut_pieces.size(),vector<int>(dp_n+1,-1));
 
     
-
-    cout<<min_cost_using_recursion(rods,costs,cut_pieces,0,0)<<endl;
+    vector<int> r1_remains;
+    vector<int> r2_remains;
+    cout<<min_cost_using_recursion(r1_remains,r2_remains,0)<<endl;
     cout<<using_dp(rods,costs,cut_pieces,0,0,dp)<<endl;
 
     return 0;
