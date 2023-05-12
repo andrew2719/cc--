@@ -27,12 +27,6 @@ def recursive(rods, costs, cut_pieces, i, remaining):
         cost_with_remaining = recursive(rods, costs, cut_pieces, i+1, remaining-cut_pieces[i])
         min_cost = min(min_cost, cost_with_remaining)
 
-    # if min_cost==cost_with_rod1:
-    #     global rod_1
-    #     rod_1+=1
-    # elif min_cost == cost_with_rod2:
-    #     global rod_2
-    #     rod_2+=1
 
     return min_cost
 
