@@ -95,32 +95,31 @@ def min_cost_fun_memo(r1_remains,r2_remains,i,memo):
     return min_cost
     
 
-# using dynamic programming iterative solution
+# using dynamic programing the above problem can be solved in O(n^2) time complexity
+# we will use a 2d array to store the min cost for each cut piece
 
-def min_cost_fun_dp_helper(cut_pieces):
-    dp = [float('inf')]*(len(cut_pieces)+1)
-    dp[0] = 0
-    for i in range(1,len(cut_pieces)+1):
-        for j in range(i):
-            dp[i] = min(dp[i],dp[j]+cut_pieces[i-j-1])
-    return dp[-1]
+def min_cost_fun_dp():
+    
+    dp = [[float('inf') for _ in range(n+1)] for _ in range(n+1)]
+    dp[0][0] = 0
 
-def min_cost_fun_dp(cut_pieces):
-    dp = [float('inf')]*(len(cut_pieces)+1)
-    dp[0] = 0
-    for i in range(1,len(cut_pieces)+1):
-        for j in range(i):
-            dp[i] = min(dp[i],dp[j]+min_cost_fun_dp_helper(cut_pieces[j:i]))
-
-    print(dp)
-    return dp[-1]
-
-
-
+    for i in range(1,n+1):
+        for j in range(1,n+1):
+            if cut_pieces[i-1]<=rods[0]:
+                dp[i][j] = min(dp[i][j],dp[i-1][j-1]+costs[0])
+            if cut_pieces[i-1]<=rods[1]:
+                dp[i][j] = min(dp[i][j],dp[i-1][j-1]+costs[1])
+            if cut_pieces[i-1]<=rods[0]:
+                dp[i][j] = min(dp[i][j],dp[i][j-1]+costs[0])
+            if cut_pieces[i-1]<=rods[1]:
+                dp[i][j] = min(dp[i][j],dp[i][j-1]+costs[1])
+    
+    return dp[n][n]
 
 print(min_cost_fun([],[],0))
 print(min_cost_fun_memo([],[],0,{}))
-print(min_cost_fun_dp(cut_pieces))
+print(min_cost_fun_dp())
+
 
 
 
