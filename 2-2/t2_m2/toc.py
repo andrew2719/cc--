@@ -1,6 +1,8 @@
 # accepted strings are "aSa" and "bSb"
 # where S can be replaced with "aSb" or "bSa" or epsilon
 # S -> aSb | bSa | epsilon
+
+
 st = ""
 flag = 0
 def check_cfg(st,s):
