@@ -14,6 +14,11 @@ void s_subst(vector<int> a,int k,int sum,int i,vector<int> &x){
     }
     if(sum+a[i]<=k){
         x.push_back(a[i]);
+        // print the x
+        // for(int j=0;j<x.size();j++){
+        //     cout<<x[j]<<" ";
+        // }
+        // cout<<endl;
         s_subst(a,k,sum+a[i],i+1,x);
         x.pop_back();
     }
