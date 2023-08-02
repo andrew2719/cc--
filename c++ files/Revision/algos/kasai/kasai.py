@@ -131,16 +131,24 @@ def count_distinct_substring(txt):
 	result += 1 # For empty string
 	return result
 
-def countSubstrings(s, queries):
-	for i in queries:
-		print(count_distinct_substring(s[i[0]:i[1]+1])-1)
+# def countSubstrings(s, queries):
+# 	for i in queries:
+# 		print(count_distinct_substring(s[i[0]:i[1]+1])-1)
 	
 		
 
-# Driver code to test above methods
-txt = "aabaa"
-queries = [[1, 1], [1, 4], [1, 1], [1, 4], [0, 2]]
 
-countSubstrings(txt, queries)
+# n,q = map(int,input().split())
+# s = input()
+# queries = []
+# for i in range(q):
+#     queries.append(list(map(int,input().split())))
+		
+# countSubstrings(s, queries)
+
+txt = "ba"
+print(count_distinct_substring(txt))
+
+
 
 # This code is contributed by Aman Kumar
