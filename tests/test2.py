@@ -1,29 +1,13 @@
-import socket
+import asyncio
 
-def start_server():
-    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    host = "0.0.0.0"  # Bind to all available interfaces
-    port = 12346     # Choose a suitable port number
+async def my_coroutine():
+    loop = asyncio.get_event_loop()
+    print(f"Running on event loop {loop}")
 
-    server_socket.bind((host, port))
-    server_socket.listen(1)
+async def main():
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    await my_coroutine()
 
-    print("Waiting for a connection...")
-    # if manual break, use Ctrl+C
-    #  and end the server
-    # if KeyboardInterrupt:
-    #     server_socket.close()
-    #     print("Server closed")
-    conn, addr = server_socket.accept()
-    print(f"Connection established with {addr}")
-
-    while True:
-        data = conn.recv(1024)
-        if not data:
-            break
-        print(f"Received message: {data.decode()}")
-
-    conn.close()
-
-if __name__ == "__main__":
-    start_server()
+loop = asyncio.get_event_loop()
+loop.run_until_complete(main())
